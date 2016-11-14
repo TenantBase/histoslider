@@ -11,8 +11,6 @@ const handleStyle = {
   cursor: 'move'
 }
 
-const f = format('0.3P')
-
 export default class Slider extends Component {
 
   componentDidMount () {
@@ -88,6 +86,7 @@ export default class Slider extends Component {
   render () {
     const selection = this.props.selection
     const selectionWidth = Math.abs(this.props.scale(selection[1]) - this.props.scale(selection[0]))
+    const f = format(this.props.selectionFormat);
 
     return (
       <svg
@@ -167,5 +166,6 @@ Slider.propTypes = {
   scale: PropTypes.func,
   reset: PropTypes.func,
   dragChange: PropTypes.func,
-  onChange: PropTypes.func
+  onChange: PropTypes.func,
+  selectionFormat: PropTypes.string,
 }
