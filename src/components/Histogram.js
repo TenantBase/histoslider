@@ -11,17 +11,18 @@ export default class Histogram extends Component {
     this.props.onChange([bucket.start, bucket.end])
   }
 
-  bucket (data, start, end, bucketSize) {
+  bucket (data, start, end, ticks) {
     const sorted = data.sort(ascending)
     let buckets = []
-    let s = start
+    let tickIndex = 0
+    let s = ticks[tickIndex]
     let i = 0
     let max = 0
 
     while (s < (end)) {
       let values = []
 
-      while (sorted[i] < (s + bucketSize)) {
+      while (sorted[i] < (ticks[tickIndex + 1])) {
         if (sorted[i] < start) continue
         values.push(data[i])
         i++
@@ -29,12 +30,13 @@ export default class Histogram extends Component {
 
       buckets.push({
         start: s,
-        end: s + bucketSize,
-        values
+        end: ticks[tickIndex + 1] || end,
+        values: values,
       })
       max = values.length > max ? values.length : max
 
-      s += bucketSize
+      tickIndex += 1
+      s = ticks[tickIndex]
     }
 
     return {
@@ -45,17 +47,34 @@ export default class Histogram extends Component {
 
   render () {
     const innerHeight = this.props.height - this.props.padding
-    const { buckets, max } = this.bucket(this.props.data, this.props.start, this.props.end, this.props.bucketSize)
+    const numberOfTicks = 20;
+    const ticks = [...Array(numberOfTicks).keys()]
+      .map(v => this.props.scale.range()[0] + v * (this.props.scale.range()[1] - this.props.scale.range()[0]) / numberOfTicks )
+      .map(this.props.scale.invert);
+
+    const { buckets, max } = this.bucket(
+      this.props.data,
+      this.props.start,
+      this.props.end,
+      ticks,
+    )
     const bucketWidth = this.props.innerWidth / buckets.length
     const selection = this.props.selection
 
-    let style = this.props.showOnDrag ? { position: 'absolute', left: '-1px', right: '-1px', backgroundColor: '#fafafa', border: '1px solid #eaeaea', borderBottom: 'none', bottom: 'calc(100% - ' + this.props.padding + 'px)' } : {}
-
+    let style = this.props.showOnDrag ? {
+      position: 'absolute',
+      left: '-1px',
+      right: '-1px',
+      backgroundColor: '#fafafa',
+      border: '1px solid #eaeaea',
+      borderBottom: 'none',
+      bottom: 'calc(100% - ' + this.props.padding + 'px)'
+    } : {};
 
     return (
       <div>
         <svg style={Object.assign({}, style, histogramStyle)} width={this.props.width} height={this.props.height}>
-          <g transform={'translate(' + this.props.padding + ',' + this.props.height + ')'}>
+          <g transform={'translate(0,' + this.props.height + ')'}>
             <g transform='scale(1,-1)'>
             {
               buckets.map((bucket, i) => {
@@ -78,10 +97,10 @@ export default class Histogram extends Component {
                 }
 
                 return (
-                  <g key={i} transform={'translate(' + (i * bucketWidth) + ', 0)'}>
+                  <g key={i} transform={'translate(' + this.props.scale(bucket.start) + ', 0)'}>
                     <rect
                       fill='#f1f1f1'
-                      width={bucketWidth - this.props.histogramPadding}
+                      width={this.props.scale(bucket.end) - this.props.scale(bucket.start) - this.props.histogramPadding}
                       height={(bucket.values.length / max) * innerHeight}
                       rx={this.props.barBorderRadius}
                       ry={this.props.barBorderRadius}
@@ -92,7 +111,7 @@ export default class Histogram extends Component {
                       onClick={this.selectBucket.bind(this, bucket)}
                       onDoubleClick={this.props.reset.bind(this)}
                       style={{ opacity, cursor: 'pointer' }}
-                      width={bucketWidth - this.props.histogramPadding}
+                      width={this.props.scale(bucket.end) - this.props.scale(bucket.start) - this.props.histogramPadding}
                       height={(bucket.values.length / max) * innerHeight}
                       rx={this.props.barBorderRadius}
                       ry={this.props.barBorderRadius}
