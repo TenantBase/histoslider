@@ -104,5 +104,5 @@ Histoslider.defaultProps = {
   style: {
     border: '1px solid red'
   },
-  selectionFormat: '0.3P',
+  selectionFormat: ',d',
 }

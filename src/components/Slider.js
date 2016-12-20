@@ -1,5 +1,5 @@
-import React, { Component, PropTypes } from 'react'
-import { format } from 'd3-format'
+  import React, { Component, PropTypes } from 'react'
+  import { format } from 'd3-format'
 
 const sliderStyle = {
   display: 'block',
@@ -139,7 +139,7 @@ export default class Slider extends Component {
                   fill='#666'
                   fontSize={12}
                 >
-                  {f(m)}
+                  {"$" + f(m)}
                 </text>
               </g>
             )
