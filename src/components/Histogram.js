@@ -23,7 +23,6 @@ export default class Histogram extends Component {
       let values = []
 
       while (sorted[i] < (ticks[tickIndex + 1])) {
-        if (sorted[i] < start) continue
         values.push(data[i])
         i++
       }
