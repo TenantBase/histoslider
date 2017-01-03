@@ -97,6 +97,7 @@ Histoslider.propTypes = {
   barBorderRadius: PropTypes.number,
   selectionFormat: PropTypes.string,
   scale: PropTypes.string,
+  sliderPrefix: PropTypes.string,
 }
 
 Histoslider.defaultProps = {
@@ -113,4 +114,5 @@ Histoslider.defaultProps = {
   },
   selectionFormat: ',d',
   scale: 'linear',
+  sliderPrefix: '',
 }

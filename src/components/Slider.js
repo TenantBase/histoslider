@@ -139,7 +139,7 @@ export default class Slider extends Component {
                   fill='#666'
                   fontSize={12}
                 >
-                  {"$" + f(m)}
+                  {this.props.sliderPrefix + f(m)}
                 </text>
               </g>
             )
@@ -168,4 +168,5 @@ Slider.propTypes = {
   dragChange: PropTypes.func,
   onChange: PropTypes.func,
   selectionFormat: PropTypes.string,
+  sliderPrefix: PropTypes.string,
 }

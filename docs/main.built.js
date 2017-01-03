@@ -21777,7 +21777,8 @@
 	  style: _react.PropTypes.object,
 	  barBorderRadius: _react.PropTypes.number,
 	  selectionFormat: _react.PropTypes.string,
-	  scale: _react.PropTypes.string
+	  scale: _react.PropTypes.string,
+	  sliderPrefix: _react.PropTypes.string
 	};
 
 	Histoslider.defaultProps = {
@@ -21793,7 +21794,8 @@
 	    border: '1px solid red'
 	  },
 	  selectionFormat: ',d',
-	  scale: 'linear'
+	  scale: 'linear',
+	  sliderPrefix: ''
 	};
 
 /***/ },
@@ -26651,7 +26653,7 @@
 	                fill: '#666',
 	                fontSize: 12
 	              },
-	              "$" + f(m)
+	              _this5.props.sliderPrefix + f(m)
 	            )
 	          );
 	        })
@@ -26682,7 +26684,8 @@
 	  reset: _react.PropTypes.func,
 	  dragChange: _react.PropTypes.func,
 	  onChange: _react.PropTypes.func,
-	  selectionFormat: _react.PropTypes.string
+	  selectionFormat: _react.PropTypes.string,
+	  sliderPrefix: _react.PropTypes.string
 	};
 
 /***/ }
