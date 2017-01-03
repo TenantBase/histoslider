@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import { extent as e } from 'd3-array'
-import { scaleLog as log } from 'd3-scale'
+import { scaleLog, scaleLinear } from 'd3-scale'
 
 import Histogram from './Histogram'
 import Slider from './Slider'
@@ -30,14 +30,20 @@ export default class Histoslider extends Component {
 
   render () {
     const extent = e(this.props.data)
-    const start = Math.max(1, this.props.start || extent[0])
+
+    const startMinimum = this.props.scale == 'linear' ? 0 : 1;
+    const start = Math.max(startMinimum, this.props.start || extent[0])
     const end = this.props.end || extent[1]
 
     const innerWidth = this.props.width - (this.props.padding * 2)
-    const scale = log()
+
+    const selectedScale = {
+      'linear': scaleLinear(),
+      'log': scaleLog().base(1.7),
+    }[this.props.scale];
+    const scale = selectedScale
       .domain([start, end])
       .range([this.props.padding, innerWidth + this.props.padding])
-      .base(1.7)
       .clamp(true)
     let selection = this.props.selection ? this.props.selection : [start, end]
     const selectionSorted = e(selection)
@@ -90,6 +96,7 @@ Histoslider.propTypes = {
   style: PropTypes.object,
   barBorderRadius: PropTypes.number,
   selectionFormat: PropTypes.string,
+  scale: PropTypes.string,
 }
 
 Histoslider.defaultProps = {
@@ -105,4 +112,5 @@ Histoslider.defaultProps = {
     border: '1px solid red'
   },
   selectionFormat: ',d',
+  scale: 'linear',
 }
