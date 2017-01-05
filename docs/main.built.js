@@ -21725,31 +21725,28 @@
 	      var start = Math.max(startMinimum, this.props.start || extent[0]);
 	      var end = this.props.end || extent[1];
 
-	      var innerWidth = this.props.width - this.props.padding * 2;
-
 	      var selectedScale = {
 	        'linear': (0, _d3Scale.scaleLinear)(),
 	        'log': (0, _d3Scale.scaleLog)().base(1.7)
 	      }[this.props.scale];
-	      var scale = selectedScale.domain([start, end]).range([this.props.padding, innerWidth + this.props.padding]).clamp(true);
+	      var scale = selectedScale.domain([start, end]).range([0, 100]).clamp(true);
 	      var selection = this.props.selection ? this.props.selection : [start, end];
 	      var selectionSorted = (0, _d3Array.extent)(selection);
 
 	      // TODO: selection layer
 	      return _react2.default.createElement(
 	        'div',
-	        { style: Object.assign(histosliderStyle, { width: this.props.width, paddingTop: this.props.padding }), className: 'Histoslider Histoslider-wrapper' },
+	        { style: Object.assign(histosliderStyle, { paddingTop: this.props.padding }), className: 'Histoslider Histoslider-wrapper' },
 	        !this.props.showOnDrag || this.state.dragging ? _react2.default.createElement(_Histogram2.default, Object.assign({}, this.props, {
 	          start: start,
 	          end: end,
 	          reset: this.reset.bind(this),
 	          extent: extent,
 	          selection: selectionSorted,
-	          innerWidth: innerWidth,
 	          scale: scale,
 	          height: this.props.height - 40
 	        })) : null,
-	        _react2.default.createElement(_Slider2.default, Object.assign({}, this.props, { start: start, end: end, dragChange: this.dragChange.bind(this), reset: this.reset.bind(this), extent: extent, selection: selection, selectionSorted: selectionSorted, scale: scale, innerWidth: innerWidth, height: 50 }))
+	        _react2.default.createElement(_Slider2.default, Object.assign({}, this.props, { start: start, end: end, dragChange: this.dragChange.bind(this), reset: this.reset.bind(this), extent: extent, selection: selection, selectionSorted: selectionSorted, scale: scale, height: 50 }))
 	      );
 	    }
 	  }]);
@@ -21767,12 +21764,11 @@
 	  end: _react.PropTypes.number,
 	  selectionColor: _react.PropTypes.string,
 	  bucketSize: _react.PropTypes.number,
-	  width: _react.PropTypes.number,
-	  height: _react.PropTypes.number,
 	  padding: _react.PropTypes.number,
 	  selection: _react.PropTypes.arrayOf(_react.PropTypes.number),
 	  histogramHeight: _react.PropTypes.number,
 	  histogramPadding: _react.PropTypes.number,
+	  height: _react.PropTypes.number,
 	  showOnDrag: _react.PropTypes.bool,
 	  style: _react.PropTypes.object,
 	  barBorderRadius: _react.PropTypes.number,
@@ -21787,7 +21783,6 @@
 	  showOnDrag: false,
 	  histogramPadding: 4,
 	  padding: 20,
-	  width: 400,
 	  height: 200,
 	  barBorderRadius: 0,
 	  style: {
@@ -26357,7 +26352,7 @@
 	          buckets = _bucket.buckets,
 	          max = _bucket.max;
 
-	      var bucketWidth = this.props.innerWidth / buckets.length;
+	      var bucketWidth = 100 / buckets.length;
 	      var selection = this.props.selection;
 
 	      var style = this.props.showOnDrag ? {
@@ -26375,7 +26370,7 @@
 	        null,
 	        _react2.default.createElement(
 	          'svg',
-	          { style: Object.assign({}, style, histogramStyle), width: this.props.width, height: this.props.height },
+	          { style: Object.assign({}, style, histogramStyle), width: '100%', height: this.props.height },
 	          _react2.default.createElement(
 	            'g',
 	            { transform: 'translate(0,' + this.props.height + ')' },
@@ -26402,27 +26397,31 @@
 	                }
 
 	                return _react2.default.createElement(
-	                  'g',
-	                  { key: i, transform: 'translate(' + _this2.props.scale(bucket.start) + ', 0)' },
-	                  _react2.default.createElement('rect', {
-	                    fill: '#f1f1f1',
-	                    width: _this2.props.scale(bucket.end) - _this2.props.scale(bucket.start) - _this2.props.histogramPadding,
-	                    height: bucket.values.length / max * innerHeight,
-	                    rx: _this2.props.barBorderRadius,
-	                    ry: _this2.props.barBorderRadius,
-	                    x: _this2.props.histogramPadding / 2
-	                  }),
-	                  _react2.default.createElement('rect', {
-	                    fill: _this2.props.selectionColor,
-	                    onClick: _this2.selectBucket.bind(_this2, bucket),
-	                    onDoubleClick: _this2.props.reset.bind(_this2),
-	                    style: { opacity: opacity, cursor: 'pointer' },
-	                    width: _this2.props.scale(bucket.end) - _this2.props.scale(bucket.start) - _this2.props.histogramPadding,
-	                    height: bucket.values.length / max * innerHeight,
-	                    rx: _this2.props.barBorderRadius,
-	                    ry: _this2.props.barBorderRadius,
-	                    x: _this2.props.histogramPadding / 2
-	                  })
+	                  'svg',
+	                  { key: i, x: _this2.props.scale(bucket.start) + '%' },
+	                  _react2.default.createElement(
+	                    'g',
+	                    null,
+	                    _react2.default.createElement('rect', {
+	                      fill: '#f1f1f1',
+	                      width: _this2.props.scale(bucket.end) - _this2.props.scale(bucket.start) - _this2.props.histogramPadding + '%',
+	                      height: bucket.values.length / max * innerHeight,
+	                      rx: _this2.props.barBorderRadius,
+	                      ry: _this2.props.barBorderRadius,
+	                      x: _this2.props.histogramPadding / 2
+	                    }),
+	                    _react2.default.createElement('rect', {
+	                      fill: _this2.props.selectionColor,
+	                      onClick: _this2.selectBucket.bind(_this2, bucket),
+	                      onDoubleClick: _this2.props.reset.bind(_this2),
+	                      style: { opacity: opacity, cursor: 'pointer' },
+	                      width: _this2.props.scale(bucket.end) - _this2.props.scale(bucket.start) - _this2.props.histogramPadding + '%',
+	                      height: bucket.values.length / max * innerHeight,
+	                      rx: _this2.props.barBorderRadius,
+	                      ry: _this2.props.barBorderRadius,
+	                      x: _this2.props.histogramPadding / 2
+	                    })
+	                  )
 	                );
 	              })
 	            )
@@ -26444,8 +26443,6 @@
 	  start: _react.PropTypes.number,
 	  end: _react.PropTypes.number,
 	  bucketSize: _react.PropTypes.number,
-	  width: _react.PropTypes.number,
-	  innerWidth: _react.PropTypes.number,
 	  height: _react.PropTypes.number,
 	  padding: _react.PropTypes.number,
 	  selectionColor: _react.PropTypes.string,
@@ -26492,7 +26489,8 @@
 	var sliderStyle = {
 	  display: 'block',
 	  paddingBottom: '8px',
-	  zIndex: '2'
+	  zIndex: '2',
+	  marginLeft: '5%'
 	};
 
 	var handleStyle = {
@@ -26564,7 +26562,7 @@
 	      var _this4 = this;
 
 	      if (!this.state.dragging) {
-	        var x = e.nativeEvent.layerX || e.nativeEvent.touches[0].pageX;
+	        var x = (e.nativeEvent.layerX || e.nativeEvent.touches[0].pageX) / $('.Histoslider').width() * 100;
 	        var selection = [].concat(_toConsumableArray(this.props.selection));
 	        var selected = this.props.scale.invert(x);
 	        var dragIndex = void 0;
@@ -26591,7 +26589,7 @@
 	    value: function mouseMove(e) {
 	      if (this.state.dragging) {
 	        var selection = [].concat(_toConsumableArray(this.props.selection));
-	        selection[this.state.dragIndex] = this.props.scale.invert(e.layerX || e.touches[0].pageX);
+	        selection[this.state.dragIndex] = this.props.scale.invert((e.layerX || e.touches[0].pageX) / $('.Histoslider').width() * 100);
 	        this.props.onChange(selection);
 	      }
 	    }
@@ -26609,7 +26607,8 @@
 	        {
 	          style: sliderStyle,
 	          height: this.props.height - 10,
-	          width: this.props.width,
+	          x: '5%',
+	          width: '90%',
 	          onMouseDown: this.dragFromSVG.bind(this),
 	          onTouchStart: this.dragFromSVG.bind(this),
 	          onDoubleClick: this.props.reset
@@ -26617,50 +26616,54 @@
 	        _react2.default.createElement('rect', {
 	          height: 4,
 	          fill: '#f1f1f1',
-	          x: this.props.padding,
+	          x: '0%',
 	          y: 10,
-	          width: this.props.innerWidth
+	          width: '100%'
 	        }),
 	        _react2.default.createElement('rect', {
 	          height: 4,
 	          fill: this.props.selectionColor,
-	          x: this.props.scale(this.props.selectionSorted[0]),
+	          x: this.props.scale(this.props.selectionSorted[0]) + '%',
 	          y: 10,
-	          width: selectionWidth
+	          width: selectionWidth + '%'
 	        }),
 	        this.props.selection.map(function (m, i) {
 	          return _react2.default.createElement(
-	            'g',
-	            { transform: 'translate(' + _this5.props.scale(m) + ', 0)', key: i },
-	            _react2.default.createElement('circle', {
-	              style: handleStyle,
-	              r: 10,
-	              cx: 0,
-	              cy: 12.5,
-	              fill: '#ddd',
-	              strokeWidth: '1'
-	            }),
-	            _react2.default.createElement('circle', {
-	              style: handleStyle,
-	              onMouseDown: _this5.dragStart.bind(_this5, i),
-	              onTouchStart: _this5.dragStart.bind(_this5, i),
-	              r: 9,
-	              cx: 0,
-	              cy: 12,
-	              fill: 'white',
-	              stroke: '#ccc',
-	              strokeWidth: '1'
-	            }),
+	            'svg',
+	            { x: _this5.props.scale(m) + '%' },
 	            _react2.default.createElement(
-	              'text',
-	              {
-	                textAnchor: 'middle',
-	                x: 0,
-	                y: 36,
-	                fill: '#666',
-	                fontSize: 12
-	              },
-	              _this5.props.sliderPrefix + f(m)
+	              'g',
+	              { transform: 'translate(0, 0)', key: i },
+	              _react2.default.createElement('circle', {
+	                style: handleStyle,
+	                r: 10,
+	                cx: 0,
+	                cy: 12.5,
+	                fill: '#ddd',
+	                strokeWidth: '1'
+	              }),
+	              _react2.default.createElement('circle', {
+	                style: handleStyle,
+	                onMouseDown: _this5.dragStart.bind(_this5, i),
+	                onTouchStart: _this5.dragStart.bind(_this5, i),
+	                r: 9,
+	                cx: 0,
+	                cy: 12,
+	                fill: 'white',
+	                stroke: '#ccc',
+	                strokeWidth: '1'
+	              }),
+	              _react2.default.createElement(
+	                'text',
+	                {
+	                  textAnchor: 'middle',
+	                  x: 0,
+	                  y: 36,
+	                  fill: '#666',
+	                  fontSize: 12
+	                },
+	                _this5.props.sliderPrefix + f(m)
+	              )
 	            )
 	          );
 	        })
@@ -26681,8 +26684,6 @@
 	  start: _react.PropTypes.number,
 	  end: _react.PropTypes.number,
 	  height: _react.PropTypes.number,
-	  width: _react.PropTypes.number,
-	  innerWidth: _react.PropTypes.number,
 	  padding: _react.PropTypes.number,
 	  bucketSize: _react.PropTypes.number,
 	  selectionColor: _react.PropTypes.string,

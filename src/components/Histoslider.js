@@ -35,22 +35,20 @@ export default class Histoslider extends Component {
     const start = Math.max(startMinimum, this.props.start || extent[0])
     const end = this.props.end || extent[1]
 
-    const innerWidth = this.props.width - (this.props.padding * 2)
-
     const selectedScale = {
       'linear': scaleLinear(),
       'log': scaleLog().base(1.7),
     }[this.props.scale];
     const scale = selectedScale
       .domain([start, end])
-      .range([this.props.padding, innerWidth + this.props.padding])
+      .range([0, 100])
       .clamp(true)
     let selection = this.props.selection ? this.props.selection : [start, end]
     const selectionSorted = e(selection)
 
     // TODO: selection layer
     return (
-      <div style={Object.assign(histosliderStyle, { width: this.props.width, paddingTop: this.props.padding })} className='Histoslider Histoslider-wrapper'>
+      <div style={Object.assign(histosliderStyle, { paddingTop: this.props.padding })} className='Histoslider Histoslider-wrapper'>
 
         {
           !this.props.showOnDrag || this.state.dragging
@@ -64,7 +62,6 @@ export default class Histoslider extends Component {
                 reset: this.reset.bind(this),
                 extent,
                 selection: selectionSorted,
-                innerWidth,
                 scale,
                 height: this.props.height - 40
               }
@@ -73,7 +70,7 @@ export default class Histoslider extends Component {
           : null
         }
 
-        <Slider {...Object.assign({}, this.props, { start, end, dragChange: this.dragChange.bind(this), reset: this.reset.bind(this), extent, selection, selectionSorted, scale, innerWidth, height: 50 })} />
+        <Slider {...Object.assign({}, this.props, { start, end, dragChange: this.dragChange.bind(this), reset: this.reset.bind(this), extent, selection, selectionSorted, scale, height: 50 })} />
       </div>
     )
   }
@@ -86,12 +83,11 @@ Histoslider.propTypes = {
   end: PropTypes.number,
   selectionColor: PropTypes.string,
   bucketSize: PropTypes.number,
-  width: PropTypes.number,
-  height: PropTypes.number,
   padding: PropTypes.number,
   selection: PropTypes.arrayOf(PropTypes.number),
   histogramHeight: PropTypes.number,
   histogramPadding: PropTypes.number,
+  height: PropTypes.number,
   showOnDrag: PropTypes.bool,
   style: PropTypes.object,
   barBorderRadius: PropTypes.number,
@@ -106,7 +102,6 @@ Histoslider.defaultProps = {
   showOnDrag: false,
   histogramPadding: 4,
   padding: 20,
-  width: 400,
   height: 200,
   barBorderRadius: 0,
   style: {

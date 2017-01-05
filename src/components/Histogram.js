@@ -57,7 +57,7 @@ export default class Histogram extends Component {
       this.props.end,
       ticks,
     )
-    const bucketWidth = this.props.innerWidth / buckets.length
+    const bucketWidth = 100 / buckets.length
     const selection = this.props.selection
 
     let style = this.props.showOnDrag ? {
@@ -72,7 +72,7 @@ export default class Histogram extends Component {
 
     return (
       <div>
-        <svg style={Object.assign({}, style, histogramStyle)} width={this.props.width} height={this.props.height}>
+        <svg style={Object.assign({}, style, histogramStyle)} width='100%' height={this.props.height}>
           <g transform={'translate(0,' + this.props.height + ')'}>
             <g transform='scale(1,-1)'>
             {
@@ -96,10 +96,11 @@ export default class Histogram extends Component {
                 }
 
                 return (
-                  <g key={i} transform={'translate(' + this.props.scale(bucket.start) + ', 0)'}>
+                  <svg key={i} x={this.props.scale(bucket.start) + '%'}>
+                  <g>
                     <rect
                       fill='#f1f1f1'
-                      width={this.props.scale(bucket.end) - this.props.scale(bucket.start) - this.props.histogramPadding}
+                      width={this.props.scale(bucket.end) - this.props.scale(bucket.start) - this.props.histogramPadding + '%'}
                       height={(bucket.values.length / max) * innerHeight}
                       rx={this.props.barBorderRadius}
                       ry={this.props.barBorderRadius}
@@ -110,13 +111,14 @@ export default class Histogram extends Component {
                       onClick={this.selectBucket.bind(this, bucket)}
                       onDoubleClick={this.props.reset.bind(this)}
                       style={{ opacity, cursor: 'pointer' }}
-                      width={this.props.scale(bucket.end) - this.props.scale(bucket.start) - this.props.histogramPadding}
+                      width={this.props.scale(bucket.end) - this.props.scale(bucket.start) - this.props.histogramPadding + '%'}
                       height={(bucket.values.length / max) * innerHeight}
                       rx={this.props.barBorderRadius}
                       ry={this.props.barBorderRadius}
                       x={this.props.histogramPadding / 2}
                     />
                   </g>
+                  </svg>
                 )
               })
             }
@@ -134,8 +136,6 @@ Histogram.propTypes = {
   start: PropTypes.number,
   end: PropTypes.number,
   bucketSize: PropTypes.number,
-  width: PropTypes.number,
-  innerWidth: PropTypes.number,
   height: PropTypes.number,
   padding: PropTypes.number,
   selectionColor: PropTypes.string,

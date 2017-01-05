@@ -4,7 +4,8 @@
 const sliderStyle = {
   display: 'block',
   paddingBottom: '8px',
-  zIndex: '2'
+  zIndex: '2',
+  marginLeft: '5%',
 }
 
 const handleStyle = {
@@ -57,7 +58,7 @@ export default class Slider extends Component {
 
   dragFromSVG (e) {
     if (!this.state.dragging) {
-      const x = e.nativeEvent.layerX || e.nativeEvent.touches[0].pageX;
+      const x = (e.nativeEvent.layerX || e.nativeEvent.touches[0].pageX) / $('.Histoslider').width() * 100;
       let selection = [...this.props.selection]
       let selected = this.props.scale.invert(x)
       let dragIndex
@@ -83,7 +84,7 @@ export default class Slider extends Component {
   mouseMove (e) {
     if (this.state.dragging) {
       let selection = [...this.props.selection]
-      selection[this.state.dragIndex] = this.props.scale.invert(e.layerX || e.touches[0].pageX)
+      selection[this.state.dragIndex] = this.props.scale.invert((e.layerX || e.touches[0].pageX) / $('.Histoslider').width() * 100);
       this.props.onChange(selection)
     }
   }
@@ -97,7 +98,8 @@ export default class Slider extends Component {
       <svg
         style={sliderStyle}
         height={this.props.height - 10}
-        width={this.props.width}
+        x='5%'
+        width={'90%'}
         onMouseDown={this.dragFromSVG.bind(this)}
         onTouchStart={this.dragFromSVG.bind(this)}
         onDoubleClick={this.props.reset}
@@ -105,21 +107,22 @@ export default class Slider extends Component {
         <rect
           height={4}
           fill={'#f1f1f1'}
-          x={this.props.padding}
+          x={'0%'}
           y={10}
-          width={this.props.innerWidth}
+          width={'100%'}
         />
         <rect
           height={4}
           fill={this.props.selectionColor}
-          x={this.props.scale(this.props.selectionSorted[0])}
+          x={this.props.scale(this.props.selectionSorted[0]) + '%'}
           y={10}
-          width={selectionWidth}
+          width={selectionWidth + '%'}
         />
         {
           this.props.selection.map((m, i) => {
             return (
-              <g transform={'translate(' + this.props.scale(m) + ', 0)'} key={i}>
+              <svg x={this.props.scale(m) + '%'}>
+              <g transform={'translate(0, 0)'} key={i}>
                 <circle
                   style={handleStyle}
                   r={10}
@@ -149,6 +152,7 @@ export default class Slider extends Component {
                   {this.props.sliderPrefix + f(m)}
                 </text>
               </g>
+              </svg>
             )
           })
         }
@@ -164,8 +168,6 @@ Slider.propTypes = {
   start: PropTypes.number,
   end: PropTypes.number,
   height: PropTypes.number,
-  width: PropTypes.number,
-  innerWidth: PropTypes.number,
   padding: PropTypes.number,
   bucketSize: PropTypes.number,
   selectionColor: PropTypes.string,
