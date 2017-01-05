@@ -121,8 +121,8 @@ export default class Slider extends Component {
         {
           this.props.selection.map((m, i) => {
             return (
-              <svg x={this.props.scale(m) + '%'}>
-              <g transform={'translate(0, 0)'} key={i}>
+              <svg x={this.props.scale(m) + '%'} key={i}>
+              <g transform={'translate(0, 0)'}>
                 <circle
                   style={handleStyle}
                   r={10}
