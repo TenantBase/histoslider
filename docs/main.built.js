@@ -26507,12 +26507,16 @@
 	    value: function componentDidMount() {
 	      window.addEventListener('mousemove', this.mouseMove.bind(this), false);
 	      window.addEventListener('mouseup', this.dragEnd.bind(this), false);
+	      window.addEventListener('touchmove', this.mouseMove.bind(this), false);
+	      window.addEventListener('touchend', this.dragEnd.bind(this), false);
 	    }
 	  }, {
 	    key: 'componentWilUnmount',
 	    value: function componentWilUnmount() {
 	      window.removeEventListener('mousemove', this.mouseMove.bind(this), false);
 	      window.removeEventListener('mouseup', this.dragEnd.bind(this), false);
+	      window.removeEventListener('touchmove', this.mouseMove.bind(this), false);
+	      window.removeEventListener('touchend', this.dragEnd.bind(this), false);
 	    }
 	  }]);
 
@@ -26560,8 +26564,9 @@
 	      var _this4 = this;
 
 	      if (!this.state.dragging) {
+	        var x = e.nativeEvent.layerX || e.nativeEvent.touches[0].pageX;
 	        var selection = [].concat(_toConsumableArray(this.props.selection));
-	        var selected = this.props.scale.invert(e.nativeEvent.layerX);
+	        var selected = this.props.scale.invert(x);
 	        var dragIndex = void 0;
 
 	        if (Math.abs(selected - selection[0]) > Math.abs(selected - selection[1])) {
@@ -26586,7 +26591,7 @@
 	    value: function mouseMove(e) {
 	      if (this.state.dragging) {
 	        var selection = [].concat(_toConsumableArray(this.props.selection));
-	        selection[this.state.dragIndex] = this.props.scale.invert(e.layerX);
+	        selection[this.state.dragIndex] = this.props.scale.invert(e.layerX || e.touches[0].pageX);
 	        this.props.onChange(selection);
 	      }
 	    }
@@ -26606,6 +26611,7 @@
 	          height: this.props.height - 10,
 	          width: this.props.width,
 	          onMouseDown: this.dragFromSVG.bind(this),
+	          onTouchStart: this.dragFromSVG.bind(this),
 	          onDoubleClick: this.props.reset
 	        },
 	        _react2.default.createElement('rect', {
@@ -26637,6 +26643,7 @@
 	            _react2.default.createElement('circle', {
 	              style: handleStyle,
 	              onMouseDown: _this5.dragStart.bind(_this5, i),
+	              onTouchStart: _this5.dragStart.bind(_this5, i),
 	              r: 9,
 	              cx: 0,
 	              cy: 12,
