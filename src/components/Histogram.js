@@ -68,8 +68,9 @@ export default class Histogram extends Component {
       border: '1px solid #eaeaea',
       borderBottom: 'none',
       bottom: 'calc(100% - ' + this.props.padding + 'px)',
+    } : {
       marginLeft: '5%',
-    } : {};
+    };
 
     return (
       <div>
