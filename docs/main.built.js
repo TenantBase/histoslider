@@ -26362,7 +26362,8 @@
 	        backgroundColor: '#fafafa',
 	        border: '1px solid #eaeaea',
 	        borderBottom: 'none',
-	        bottom: 'calc(100% - ' + this.props.padding + 'px)'
+	        bottom: 'calc(100% - ' + this.props.padding + 'px)',
+	        marginLeft: '5%'
 	      } : {};
 
 	      return _react2.default.createElement(
@@ -26370,7 +26371,7 @@
 	        null,
 	        _react2.default.createElement(
 	          'svg',
-	          { style: Object.assign({}, style, histogramStyle), width: '100%', height: this.props.height },
+	          { style: Object.assign({}, style, histogramStyle), width: '90%', height: this.props.height },
 	          _react2.default.createElement(
 	            'g',
 	            { transform: 'translate(0,' + this.props.height + ')' },
