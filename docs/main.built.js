@@ -26610,10 +26610,7 @@
 	          style: sliderStyle,
 	          height: this.props.height - 10,
 	          x: '5%',
-	          width: '90%',
-	          onMouseDown: this.dragFromSVG.bind(this),
-	          onTouchStart: this.dragFromSVG.bind(this),
-	          onDoubleClick: this.props.reset
+	          width: '90%'
 	        },
 	        _react2.default.createElement('rect', {
 	          height: 4,

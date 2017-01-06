@@ -100,9 +100,6 @@ export default class Slider extends Component {
         height={this.props.height - 10}
         x='5%'
         width={'90%'}
-        onMouseDown={this.dragFromSVG.bind(this)}
-        onTouchStart={this.dragFromSVG.bind(this)}
-        onDoubleClick={this.props.reset}
       >
         <rect
           height={4}
