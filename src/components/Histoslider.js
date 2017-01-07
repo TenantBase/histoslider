@@ -24,10 +24,6 @@ export default class Histoslider extends Component {
     this.setState({ dragging })
   }
 
-  reset () {
-    this.props.onChange(null)
-  }
-
   render () {
     const extent = e(this.props.data)
 
@@ -59,7 +55,6 @@ export default class Histoslider extends Component {
               {
                 start,
                 end,
-                reset: this.reset.bind(this),
                 extent,
                 selection: selectionSorted,
                 scale,
@@ -70,7 +65,7 @@ export default class Histoslider extends Component {
           : null
         }
 
-        <Slider {...Object.assign({}, this.props, { start, end, dragChange: this.dragChange.bind(this), reset: this.reset.bind(this), extent, selection, selectionSorted, scale, height: 50 })} />
+        <Slider {...Object.assign({}, this.props, { start, end, dragChange: this.dragChange.bind(this), extent, selection, selectionSorted, scale, height: 50 })} />
       </div>
     )
   }

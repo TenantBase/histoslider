@@ -170,7 +170,6 @@ Slider.propTypes = {
   selectionColor: PropTypes.string,
   histogramPadding: PropTypes.number,
   scale: PropTypes.func,
-  reset: PropTypes.func,
   dragChange: PropTypes.func,
   onChange: PropTypes.func,
   selectionFormat: PropTypes.string,

@@ -111,7 +111,6 @@ export default class Histogram extends Component {
                     <rect
                       fill={this.props.selectionColor}
                       onClick={this.selectBucket.bind(this, bucket)}
-                      onDoubleClick={this.props.reset.bind(this)}
                       style={{ opacity, cursor: 'pointer' }}
                       width={this.props.scale(bucket.end) - this.props.scale(bucket.start) - this.props.histogramPadding + '%'}
                       height={(bucket.values.length / max) * innerHeight}
@@ -143,7 +142,6 @@ Histogram.propTypes = {
   selectionColor: PropTypes.string,
   histogramPadding: PropTypes.number,
   showOnDrag: PropTypes.bool,
-  reset: PropTypes.func,
   onChange: PropTypes.func,
   barBorderRadius: PropTypes.number
 }

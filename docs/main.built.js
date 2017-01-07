@@ -21712,11 +21712,6 @@
 	      this.setState({ dragging: dragging });
 	    }
 	  }, {
-	    key: 'reset',
-	    value: function reset() {
-	      this.props.onChange(null);
-	    }
-	  }, {
 	    key: 'render',
 	    value: function render() {
 	      var extent = (0, _d3Array.extent)(this.props.data);
@@ -21740,13 +21735,12 @@
 	        !this.props.showOnDrag || this.state.dragging ? _react2.default.createElement(_Histogram2.default, Object.assign({}, this.props, {
 	          start: start,
 	          end: end,
-	          reset: this.reset.bind(this),
 	          extent: extent,
 	          selection: selectionSorted,
 	          scale: scale,
 	          height: this.props.height - 40
 	        })) : null,
-	        _react2.default.createElement(_Slider2.default, Object.assign({}, this.props, { start: start, end: end, dragChange: this.dragChange.bind(this), reset: this.reset.bind(this), extent: extent, selection: selection, selectionSorted: selectionSorted, scale: scale, height: 50 }))
+	        _react2.default.createElement(_Slider2.default, Object.assign({}, this.props, { start: start, end: end, dragChange: this.dragChange.bind(this), extent: extent, selection: selection, selectionSorted: selectionSorted, scale: scale, height: 50 }))
 	      );
 	    }
 	  }]);
@@ -26415,7 +26409,6 @@
 	                    _react2.default.createElement('rect', {
 	                      fill: _this2.props.selectionColor,
 	                      onClick: _this2.selectBucket.bind(_this2, bucket),
-	                      onDoubleClick: _this2.props.reset.bind(_this2),
 	                      style: { opacity: opacity, cursor: 'pointer' },
 	                      width: _this2.props.scale(bucket.end) - _this2.props.scale(bucket.start) - _this2.props.histogramPadding + '%',
 	                      height: bucket.values.length / max * innerHeight,
@@ -26450,7 +26443,6 @@
 	  selectionColor: _react.PropTypes.string,
 	  histogramPadding: _react.PropTypes.number,
 	  showOnDrag: _react.PropTypes.bool,
-	  reset: _react.PropTypes.func,
 	  onChange: _react.PropTypes.func,
 	  barBorderRadius: _react.PropTypes.number
 	};
@@ -26688,7 +26680,6 @@
 	  selectionColor: _react.PropTypes.string,
 	  histogramPadding: _react.PropTypes.number,
 	  scale: _react.PropTypes.func,
-	  reset: _react.PropTypes.func,
 	  dragChange: _react.PropTypes.func,
 	  onChange: _react.PropTypes.func,
 	  selectionFormat: _react.PropTypes.string,
