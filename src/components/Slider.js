@@ -58,7 +58,17 @@ export default class Slider extends Component {
 
   dragFromSVG (e) {
     if (!this.state.dragging) {
-      const x = (e.nativeEvent.layerX || e.nativeEvent.touches[0].pageX) / $('.Histoslider').width() * 100;
+      const event = e.nativeEvent;
+      let absoluteX;
+      if (event.layerX) {
+        absoluteX = event.layerX;
+      } else if (event.touches && event.touches.length > 0) {
+        absoluteX = event.touches[0].pageX;
+      } else {
+        absoluteX = 0;
+      }
+
+      const x = absoluteX / $('.Histoslider').width() * 100;
       let selection = [...this.props.selection]
       let selected = this.props.scale.invert(x)
       let dragIndex
@@ -84,7 +94,17 @@ export default class Slider extends Component {
   mouseMove (e) {
     if (this.state.dragging) {
       let selection = [...this.props.selection]
-      selection[this.state.dragIndex] = this.props.scale.invert((e.layerX || e.touches[0].pageX) / $('.Histoslider').width() * 100);
+      const event = e;
+      let absoluteX;
+      if (event.layerX) {
+        absoluteX = event.layerX;
+      } else if (event.touches && event.touches.length > 0) {
+        absoluteX = event.touches[0].pageX;
+      } else {
+        absoluteX = 0;
+      }
+      const x = absoluteX / $('.Histoslider').width() * 100
+      selection[this.state.dragIndex] = this.props.scale.invert(x);
       this.props.onChange(selection)
     }
   }

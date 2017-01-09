@@ -26556,7 +26556,17 @@
 	      var _this4 = this;
 
 	      if (!this.state.dragging) {
-	        var x = (e.nativeEvent.layerX || e.nativeEvent.touches[0].pageX) / $('.Histoslider').width() * 100;
+	        var event = e.nativeEvent;
+	        var absoluteX = void 0;
+	        if (event.layerX) {
+	          absoluteX = event.layerX;
+	        } else if (event.touches && event.touches.length > 0) {
+	          absoluteX = event.touches[0].pageX;
+	        } else {
+	          absoluteX = 0;
+	        }
+
+	        var x = absoluteX / $('.Histoslider').width() * 100;
 	        var selection = [].concat(_toConsumableArray(this.props.selection));
 	        var selected = this.props.scale.invert(x);
 	        var dragIndex = void 0;
@@ -26583,7 +26593,17 @@
 	    value: function mouseMove(e) {
 	      if (this.state.dragging) {
 	        var selection = [].concat(_toConsumableArray(this.props.selection));
-	        selection[this.state.dragIndex] = this.props.scale.invert((e.layerX || e.touches[0].pageX) / $('.Histoslider').width() * 100);
+	        var event = e;
+	        var absoluteX = void 0;
+	        if (event.layerX) {
+	          absoluteX = event.layerX;
+	        } else if (event.touches && event.touches.length > 0) {
+	          absoluteX = event.touches[0].pageX;
+	        } else {
+	          absoluteX = 0;
+	        }
+	        var x = absoluteX / $('.Histoslider').width() * 100;
+	        selection[this.state.dragIndex] = this.props.scale.invert(x);
 	        this.props.onChange(selection);
 	      }
 	    }
